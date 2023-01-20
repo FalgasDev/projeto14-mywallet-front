@@ -12,15 +12,20 @@ export default function RegisterPage() {
 
 	async function register(e) {
 		e.preventDefault();
-    if (password !== confirm) {
-      return alert('As senhas não conferem')
-    }
+		if (password !== confirm) {
+			return alert('As senhas não conferem');
+		}
 
-    const URL = `http://localhost:5000/users`
-    const body = { name, email, password }
+		const URL = `http://localhost:5000/sign-up`;
+		const body = { name, email, password };
 
-    await axios.post(URL, body);
-		navigate('/');
+		try {
+			await axios.post(URL, body);
+			navigate('/');
+		} catch (error) {
+			alert(error.response.data);
+			console.log(error);
+		}
 	}
 
 	return (
