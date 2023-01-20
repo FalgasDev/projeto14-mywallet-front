@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-export default function LoginPage({ setToken }) {
+export default function LoginPage({ setToken, setName }) {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const navigate = useNavigate();
@@ -16,7 +16,8 @@ export default function LoginPage({ setToken }) {
 
 		try {
 			const data = await axios.post(URL, body);
-			setToken(data.data);
+			setToken(data.data.token);
+			setName(data.data.name)
 			navigate('/home');
 		} catch (error) {
 			alert(error.response.data);

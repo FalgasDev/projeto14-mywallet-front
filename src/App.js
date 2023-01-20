@@ -8,15 +8,16 @@ import RegisterPage from './pages/RegisterPage';
 
 function App() {
 	const [token, setToken] = useState('');
+	const [name, setName] = useState('')
 
 	return (
 		<BrowserRouter>
 			<Routes>
-				<Route path="/" element={<LoginPage setToken={setToken} />} />
+				<Route path="/" element={<LoginPage setToken={setToken} setName={setName}/>} />
 				<Route path="/cadastro" element={<RegisterPage />} />
-				<Route path="/home" element={<HomePage />} />
-				<Route path="/nova-entrada" element={<NewEntryPage />} />
-				<Route path="/nova-saida" element={<NewExitPage />} />
+				<Route path="/home" element={<HomePage token={token} name={name}/>} />
+				<Route path="/nova-entrada" element={<NewEntryPage token={token}/>} />
+				<Route path="/nova-saida" element={<NewExitPage token={token}/>} />
 			</Routes>
 		</BrowserRouter>
 	);

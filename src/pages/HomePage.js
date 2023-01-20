@@ -4,35 +4,56 @@ import { IoIosAddCircleOutline } from 'react-icons/io';
 import { IoIosRemoveCircleOutline } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
 import Registers from '../components/Registers';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
-export default function HomePage() {
+export default function HomePage({ token, name }) {
 	const navigate = useNavigate();
-	const registers = [
-		{
-			description: 'Almoço mãe',
-			value: '39.90',
-			date: '30/11',
-			type: 'exit',
-		},
-		{
-			description: 'Academia',
-			value: '150.00',
-			date: '15/11',
-			type: 'exit',
-		},
-		{
-			description: 'Salário',
-			value: '2500.00',
-			date: '12/11',
-			type: 'entry',
-		},
-	];
+	const [registers, setRegisters] = useState([]);
 	let balance = 0;
+
+	useEffect(() => {
+		async function data() {
+			const URL = 'http://localhost:5000/wallet';
+			const config = {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			};
+
+			try {
+				const data = await axios.get(URL, config);
+				setRegisters(data.data);
+			} catch (error) {
+				alert(error.response.data);
+			}
+		};
+		data()
+	}, []);
+
+	// {
+	// 	description: 'Almoço mãe',
+	// 	value: '39.90',
+	// 	date: '30/11',
+	// 	type: 'exit',
+	// },
+	// {
+	// 	description: 'Academia',
+	// 	value: '150.00',
+	// 	date: '15/11',
+	// 	type: 'exit',
+	// },
+	// {
+	// 	description: 'Salário',
+	// 	value: '2500.00',
+	// 	date: '12/11',
+	// 	type: 'entry',
+	// },
 
 	return (
 		<Container>
 			<Header>
-				<h1>Olá, Fulano</h1>
+				<h1>Olá, {name}</h1>
 				<HiOutlineArrowRightOnRectangle onClick={() => navigate('/')} />
 			</Header>
 			<RegistersContainer registers={registers}>
@@ -49,7 +70,7 @@ export default function HomePage() {
 						/>
 					);
 				})}
-				<TotalBalance>
+				<TotalBalance registers={registers}>
 					<h3>SALDO</h3>
 					<p>{balance}</p>
 				</TotalBalance>
@@ -159,6 +180,7 @@ const TotalBalance = styled.div`
 	position: absolute;
 	bottom: 5px;
 	font-size: 17px;
+	display: ${props => props.registers.length === 0 ? 'none' : ''};
 	h3 {
 		font-weight: 700;
 	}

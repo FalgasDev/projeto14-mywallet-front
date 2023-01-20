@@ -1,15 +1,31 @@
+import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-export default function NewExitPage() {
+export default function NewExitPage({token}) {
   const [value, setValue] = useState('')
   const [description, setDescription] = useState('')
   const navigate = useNavigate()
 
-  function createExit(e) {
+  async function createExit(e) {
     e.preventDefault()
-    alert('ok')
+
+    if (isNaN(Number(value))) return alert('O valor só pode ter números')
+
+		const URL = 'http://localhost:5000/transactions'
+		const body = { value, description, type: 'exit'}
+		const config = {
+			headers: {
+				Authorization: `Bearer ${token}`
+			}
+		}
+		try {
+			await axios.post(URL, body, config)
+		} catch (error) {
+			alert(error.response.data)
+		}
+
     navigate('/home')
   }
 
