@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-export default function LoginPage({ setToken, setName }) {
+export default function LoginPage() {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const navigate = useNavigate();
@@ -11,13 +11,13 @@ export default function LoginPage({ setToken, setName }) {
 	async function login(e) {
 		e.preventDefault();
 
-		const URL = 'http://localhost:5000/sign-in';
+		const URL = `${process.env.REACT_APP_API_URL}/sign-in`;
 		const body = { email, password };
 
 		try {
 			const data = await axios.post(URL, body);
-			setToken(data.data.token);
-			setName(data.data.name)
+			localStorage.setItem('Token', data.data.token);
+			localStorage.setItem('Name', data.data.name)
 			navigate('/home');
 		} catch (error) {
 			alert(error.response.data);

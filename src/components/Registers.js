@@ -4,7 +4,7 @@ export default function Registers({description, value, date, type}) {
 	return (
 		<RegisterContainer type={type}>
 			<p><span>{date}</span> {description}</p>
-      <p>{value}</p>
+      <p>{value.toFixed(2)}</p>
 		</RegisterContainer>
 	);
 }

@@ -7,14 +7,16 @@ import Registers from '../components/Registers';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-export default function HomePage({ token, name }) {
+export default function HomePage() {
 	const navigate = useNavigate();
 	const [registers, setRegisters] = useState([]);
 	let balance = 0;
+	const token = localStorage.getItem('Token')
+	const name = localStorage.getItem('Name')
 
 	useEffect(() => {
 		async function data() {
-			const URL = 'http://localhost:5000/wallet';
+			const URL = `${process.env.REACT_APP_API_URL}/wallet`;
 			const config = {
 				headers: {
 					Authorization: `Bearer ${token}`,
@@ -31,25 +33,6 @@ export default function HomePage({ token, name }) {
 		data()
 	}, []);
 
-	// {
-	// 	description: 'Almoço mãe',
-	// 	value: '39.90',
-	// 	date: '30/11',
-	// 	type: 'exit',
-	// },
-	// {
-	// 	description: 'Academia',
-	// 	value: '150.00',
-	// 	date: '15/11',
-	// 	type: 'exit',
-	// },
-	// {
-	// 	description: 'Salário',
-	// 	value: '2500.00',
-	// 	date: '12/11',
-	// 	type: 'entry',
-	// },
-
 	return (
 		<Container>
 			<Header>
@@ -63,16 +46,17 @@ export default function HomePage({ token, name }) {
 						: (balance += Number(item.value));
 					return (
 						<Registers
+							key={item._id}
 							description={item.description}
-							value={item.value}
+							value={Number(item.value)}
 							date={item.date}
 							type={item.type}
 						/>
 					);
 				})}
-				<TotalBalance registers={registers}>
+				<TotalBalance registers={registers} balance={balance}>
 					<h3>SALDO</h3>
-					<p>{balance}</p>
+					<p>{balance.toFixed(2)}</p>
 				</TotalBalance>
 				<h2>Não há registros de entrada ou saída</h2>
 			</RegistersContainer>
@@ -185,6 +169,6 @@ const TotalBalance = styled.div`
 		font-weight: 700;
 	}
 	p {
-		color: #03ac00;
+		color: ${props => props.balance <= 0 ? '#C70000' : '#03ac00'};
 	}
 `;

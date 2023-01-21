@@ -3,31 +3,32 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-export default function NewEntryPage({token}) {
+export default function NewEntryPage() {
 	const [value, setValue] = useState('');
 	const [description, setDescription] = useState('');
 	const navigate = useNavigate();
+	const token = localStorage.getItem('Token');
 
-  async function createEntry(e) {
-    e.preventDefault()
+	async function createEntry(e) {
+		e.preventDefault();
 
-    if (isNaN(Number(value))) return alert('O valor só pode ter números')
+		if (isNaN(Number(value))) return alert('O valor só pode ter número e .');
 
-		const URL = 'http://localhost:5000/transactions'
-		const body = { value, description, type: 'entry'}
+		const URL = `${process.env.REACT_APP_API_URL}/transactions`;
+		const body = { value: Number(value), description, type: 'entry' };
 		const config = {
 			headers: {
-				Authorization: `Bearer ${token}`
-			}
-		}
+				Authorization: `Bearer ${token}`,
+			},
+		};
 		try {
-			await axios.post(URL, body, config)
+			await axios.post(URL, body, config);
 		} catch (error) {
-			alert(error.response.data)
+			alert(error.response.data);
 		}
 
-    navigate('/home')
-  }
+		navigate('/home');
+	}
 
 	return (
 		<Container>
@@ -47,7 +48,7 @@ export default function NewEntryPage({token}) {
 					onChange={(e) => setDescription(e.target.value)}
 					required
 				/>
-				<SendButton type='submit'>Salvar entrada</SendButton>
+				<SendButton type="submit">Salvar entrada</SendButton>
 			</form>
 		</Container>
 	);

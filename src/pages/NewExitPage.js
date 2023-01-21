@@ -3,18 +3,19 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-export default function NewExitPage({token}) {
+export default function NewExitPage() {
   const [value, setValue] = useState('')
   const [description, setDescription] = useState('')
   const navigate = useNavigate()
+	const token = localStorage.getItem('Token')
 
   async function createExit(e) {
     e.preventDefault()
 
-    if (isNaN(Number(value))) return alert('O valor só pode ter números')
+    if (isNaN(Number(value))) return alert('O valor só pode ter número e .')
 
-		const URL = 'http://localhost:5000/transactions'
-		const body = { value, description, type: 'exit'}
+		const URL = `${process.env.REACT_APP_API_URL}/transactions`
+		const body = { value: Number(value), description, type: 'exit'}
 		const config = {
 			headers: {
 				Authorization: `Bearer ${token}`
