@@ -33,11 +33,16 @@ export default function HomePage() {
 		data()
 	}, []);
 
+	function logout() {
+		localStorage.clear()
+		navigate('/')
+	}
+
 	return (
 		<Container>
 			<Header>
 				<h1>Olá, {name}</h1>
-				<HiOutlineArrowRightOnRectangle onClick={() => navigate('/')} />
+				<HiOutlineArrowRightOnRectangle onClick={logout} />
 			</Header>
 			<RegistersContainer registers={registers}>
 				{registers.map((item) => {
