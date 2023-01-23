@@ -132,6 +132,7 @@ const RegistersContainer = styled.div`
 		display: flex;
 		flex-direction: column;
 		gap: 10px;
+		display: ${(props) => (props.registers.length === 0 ? 'none' : '')}
 	}
 `;
 
