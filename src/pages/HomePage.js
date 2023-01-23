@@ -11,8 +11,8 @@ export default function HomePage() {
 	const navigate = useNavigate();
 	const [registers, setRegisters] = useState([]);
 	let balance = 0;
-	const token = localStorage.getItem('Token')
-	const name = localStorage.getItem('Name')
+	const token = localStorage.getItem('Token');
+	const name = localStorage.getItem('Name');
 
 	useEffect(() => {
 		async function data() {
@@ -29,13 +29,13 @@ export default function HomePage() {
 			} catch (error) {
 				alert(error.response.data);
 			}
-		};
-		data()
+		}
+		data();
 	}, []);
 
 	function logout() {
-		localStorage.clear()
-		navigate('/')
+		localStorage.clear();
+		navigate('/');
 	}
 
 	return (
@@ -45,20 +45,22 @@ export default function HomePage() {
 				<HiOutlineArrowRightOnRectangle onClick={logout} />
 			</Header>
 			<RegistersContainer registers={registers}>
-				{registers.map((item) => {
-					item.type === 'exit'
-						? (balance -= Number(item.value))
-						: (balance += Number(item.value));
-					return (
-						<Registers
-							key={item._id}
-							description={item.description}
-							value={Number(item.value)}
-							date={item.date}
-							type={item.type}
-						/>
-					);
-				})}
+				<main>
+					{registers.map((item) => {
+						item.type === 'exit'
+							? (balance -= Number(item.value))
+							: (balance += Number(item.value));
+						return (
+							<Registers
+								key={item._id}
+								description={item.description}
+								value={Number(item.value)}
+								date={item.date}
+								type={item.type}
+							/>
+						);
+					})}
+				</main>
 				<TotalBalance registers={registers} balance={balance}>
 					<h3>SALDO</h3>
 					<p>{balance.toFixed(2)}</p>
@@ -114,9 +116,7 @@ const RegistersContainer = styled.div`
 	flex-direction: column;
 	justify-content: ${(props) => (props.registers.length === 0 ? 'center' : '')};
 	align-items: center;
-	padding-top: 23px;
-	padding-left: 12px;
-	padding-right: 11px;
+	padding: 21px 11px 35px 12px;
 	position: relative;
 	h2 {
 		color: #868686;
@@ -124,6 +124,14 @@ const RegistersContainer = styled.div`
 		text-align: center;
 		line-height: 23px;
 		display: ${(props) => (props.registers.length === 0 ? '' : 'none')};
+	}
+	main {
+		width: 100%;
+		height: 100%;
+		overflow-y: scroll;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
 	}
 `;
 
@@ -167,13 +175,14 @@ const TotalBalance = styled.div`
 	justify-content: space-between;
 	align-items: center;
 	position: absolute;
-	bottom: 5px;
+	background-color: #ffffff;
+	bottom: 0;
 	font-size: 17px;
-	display: ${props => props.registers.length === 0 ? 'none' : ''};
+	display: ${(props) => (props.registers.length === 0 ? 'none' : '')};
 	h3 {
 		font-weight: 700;
 	}
 	p {
-		color: ${props => props.balance <= 0 ? '#C70000' : '#03ac00'};
+		color: ${(props) => (props.balance <= 0 ? '#C70000' : '#03ac00')};
 	}
 `;

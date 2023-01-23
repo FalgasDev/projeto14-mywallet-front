@@ -23,11 +23,10 @@ export default function NewEntryPage() {
 		};
 		try {
 			await axios.post(URL, body, config);
+			navigate('/home');
 		} catch (error) {
 			alert(error.response.data);
 		}
-
-		navigate('/home');
 	}
 
 	return (
